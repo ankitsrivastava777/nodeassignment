@@ -1,27 +1,14 @@
 var mongoose = require("mongoose");
 var passwordHash = require("password-hash");
 var async = require("async");
+var {conn} = require('./index');
 
-var conn = mongoose.createConnection(
-  "mongodb://localhost:27017/mydb",
-  {
-    useNewUrlParser: true,
-    useFindAndModify: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  },
-  function (err, db) {
-    if (err) {
-      console.log("no");
-    }
-  }
-);
 //without difining collection field and type
 var users_schema = mongoose.Schema(
   {},
   {
     strict: false,
-    collection: "users",
+    collection: "user",
   }
 );
 // difined collection field and type
@@ -44,11 +31,11 @@ var usersprofile_schema = mongoose.Schema(
   {
     strict: false,
 
-    collection: "usersProfile",
+    collection: "userProfilee",
   }
 );
-var user_profile = conn.model("usersProfile", usersprofile_schema);
-var users = conn.model("users", users_schema);
+var user_profile = conn.model("userProfile", usersprofile_schema);
+var users = conn.model("user", users_schema);
 
 // using async method
 
