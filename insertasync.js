@@ -1,39 +1,17 @@
 var mongoose = require("mongoose");
 var passwordHash = require("password-hash");
 var async = require("async");
-var {conn} = require('./index');
+var {conn, usersprofile_schema} = require('./index');
 
 //without difining collection field and type
 var users_schema = mongoose.Schema(
   {},
   {
-    strict: false,
+    strict: true,
     collection: "user",
   }
 );
-// difined collection field and type
 
-var usersprofile_schema = mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-    },
-    dob: {
-      type: String,
-      required: true,
-    },
-    mobile: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    strict: false,
-
-    collection: "userProfilee",
-  }
-);
 var user_profile = conn.model("userProfile", usersprofile_schema);
 var users = conn.model("user", users_schema);
 

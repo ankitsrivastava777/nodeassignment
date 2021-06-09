@@ -14,12 +14,28 @@ var conn = mongoose.createConnection(
     }
   }
 );
-//without difining collection field and type
-var users_schema = mongoose.Schema(
-  {},
-  {
-    strict: false,
 
+var users_schema = mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    strict: true,
     collection: "users",
   }
 );
@@ -41,8 +57,7 @@ var usersprofile_schema = mongoose.Schema(
     },
   },
   {
-    strict: false,
-
+    strict: true,
     collection: "usersProfile",
   }
 );
@@ -58,10 +73,12 @@ var save_users = new users({
   date: new Date() + "",
 });
 
+userId = save_users._id;
+
 var save_profile = new users_profile({
-  userId: save_users._id,
-  dob: "Ankit333",
-  mobile: "700794451",
+  userId: userId,
+  dob: "1996-12-12",
+  mobile: "7007294451",
   date: new Date() + "",
 });
 
@@ -72,7 +89,6 @@ save_profile.save(function (err) {
 
     process.exit();
   }
-
   console.log("Users Profile Saved");
 });
 
@@ -81,10 +97,9 @@ save_users.save(function (err) {
 
   if (err) {
     console.log(err);
-
     process.exit();
   }
-
   console.log("Users Saved");
 });
 exports.conn = conn;
+exports.usersprofile_schema = usersprofile_schema;
