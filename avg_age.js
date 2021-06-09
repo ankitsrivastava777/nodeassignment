@@ -1,9 +1,6 @@
 var mongoose = require("mongoose");
 var passwordHash = require("password-hash");
-var {conn, usersprofile_schema} = require('./index');
-
-var avg_age = conn.model("usersProfile", usersprofile_schema);
-//calculate age from date
+var {conn, usersprofile_schema, users_profile} = require('./index');
 
 function getAge(dateString) {
   var today = new Date();
@@ -24,7 +21,7 @@ function getArraySum(a) {
   return total;
 }
 
-avg_age.find({}, function (err, result) {
+users_profile.find({}, function (err, result) {
   var get_age = [];
   for (var i = 0; i < result.length; i++) {
     get_age.push(getAge(result[i].dob));

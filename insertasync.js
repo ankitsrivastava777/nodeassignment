@@ -1,21 +1,7 @@
 var mongoose = require("mongoose");
 var passwordHash = require("password-hash");
 var async = require("async");
-var {conn, usersprofile_schema} = require('./index');
-
-//without difining collection field and type
-var users_schema = mongoose.Schema(
-  {},
-  {
-    strict: true,
-    collection: "user",
-  }
-);
-
-var user_profile = conn.model("userProfile", usersprofile_schema);
-var users = conn.model("user", users_schema);
-
-// using async method
+var {conn, usersprofile_schema, users_profile, users, users_schema} = require('./index');
 
 var user_records = [];
 for (var i = 0; i < 5; i++) {
@@ -62,7 +48,7 @@ async.eachLimit(user_records, 5, function (row, callback) {
 });
 
 async.eachLimit(profile_records, 5, function (row, callback) {
-  var save_profile = new user_profile({
+  var save_profile = new users_profile({
     userId: row.userId,
     dob: row.dob,
     age: row.age,

@@ -65,12 +65,11 @@ var users_profile = conn.model("usersProfile", usersprofile_schema);
 var users = conn.model("users", users_schema);
 
 var save_users = new users({
-  _id: new mongoose.Types.ObjectId(),
   username: "Ankit3323",
   lastname: "Srivastava",
   email: "ankit@gmail.com",
   password: passwordHash.generate("type: String, required: true"),
-  date: new Date() + "",
+  date: new Date(),
 });
 
 userId = save_users._id;
@@ -79,7 +78,7 @@ var save_profile = new users_profile({
   userId: userId,
   dob: "1996-12-12",
   mobile: "7007294451",
-  date: new Date() + "",
+  date: new Date(),
 });
 
 save_profile.save(function (err) {
@@ -103,3 +102,7 @@ save_users.save(function (err) {
 });
 exports.conn = conn;
 exports.usersprofile_schema = usersprofile_schema;
+exports.users_profile = users_profile;
+exports.users = users;
+exports.users_schema = users_schema;
+
