@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var async = require("async");
 var passwordHash = require("password-hash");
 var conn = mongoose.createConnection(
   "mongodb://localhost:27017/mydb",
@@ -14,7 +15,6 @@ var conn = mongoose.createConnection(
     }
   }
 );
-
 var users_schema = mongoose.Schema(
   {
     username: {
@@ -63,46 +63,69 @@ var usersprofile_schema = mongoose.Schema(
 );
 var users_profile = conn.model("usersProfile", usersprofile_schema);
 var users = conn.model("users", users_schema);
+console.log("ff");
 
-var save_users = new users({
-  username: "Ankit3323",
-  lastname: "Srivastava",
-  email: "ankit@gmail.com",
-  password: passwordHash.generate("type: String, required: true"),
-  date: new Date(),
+var user_records = [];
+var user_profile = [];
+
+for (var i = 0; i < 5; i++) {
+  user_records.push({
+    username: "Ankit3323" + Math.random(1000),
+    lastname: "Srivastava",
+    email: "ankit@gmail.com",
+    password: passwordHash.generate("type: String, required: true"),
+  });
+  user_profile.push({
+    dob: "1996-12-12",
+    mobile: "7007294451",
+    date: new Date(),
+  });
+}
+
+console.log(user_profile);
+
+async.each(user_records, function (row, callback) {
+  var save_users = new users({
+    username: row.username,
+    lastname: row.lastname,
+    email: "ankit@gmail.com",
+    password: passwordHash.generate("hjbhjbhjbhb"),
+  });
+
+  userId = save_users._id;
+
+  save_users.save(function (err, row) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      console.log("Users saved");
+      callback();
+    }
+  });
 });
 
-userId = save_users._id;
+async.each(user_profile, function (row, callback) {
+  var save_profile = new users_profile({
+    userId: userId,
+    dob: "1996-12-12",
+    mobile: row.mobile,
+    date: new Date(),
+  });
 
-var save_profile = new users_profile({
-  userId: userId,
-  dob: "1996-12-12",
-  mobile: "7007294451",
-  date: new Date(),
+  save_profile.save(function (err, row) {
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      console.log("Users Profile saved");
+      callback();
+    }
+  });
 });
 
-save_profile.save(function (err) {
-  //save done
-  if (err) {
-    console.log(err);
-
-    process.exit();
-  }
-  console.log("Users Profile Saved");
-});
-
-save_users.save(function (err) {
-  //save done
-
-  if (err) {
-    console.log(err);
-    process.exit();
-  }
-  console.log("Users Saved");
-});
 exports.conn = conn;
 exports.usersprofile_schema = usersprofile_schema;
 exports.users_profile = users_profile;
 exports.users = users;
 exports.users_schema = users_schema;
-
